@@ -214,4 +214,9 @@ public class GhostImpl implements Ghost {
     protected void setChaseStrategy(ChaseStrategy chaseStrategy) {
         this.chaseStrategy = chaseStrategy;
     }
+
+    @Override
+    public Vector2D getTargetCorner() {
+        return this.targetLocation;
+    }
 }
