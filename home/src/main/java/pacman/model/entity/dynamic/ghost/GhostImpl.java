@@ -2,7 +2,7 @@ package pacman.model.entity.dynamic.ghost;
 
 import javafx.scene.image.Image;
 import pacman.model.entity.Renderable;
-import pacman.model.entity.dynamic.ghost.chasestrat.ChaseStrategy;
+import pacman.model.entity.dynamic.ghost.chasestrat.*;
 import pacman.model.entity.dynamic.physics.*;
 import pacman.model.level.Level;
 import pacman.model.maze.Maze;
@@ -35,8 +35,7 @@ public class GhostImpl implements Ghost {
                      BoundingBox boundingBox,
                      KinematicState kinematicState,
                      GhostMode ghostMode,
-                     Vector2D targetCorner,
-                     ChaseStrategy chaseStrategy) {
+                     Vector2D targetCorner) {
         this.image = image;
         this.boundingBox = boundingBox;
         this.kinematicState = kinematicState;
@@ -46,7 +45,9 @@ public class GhostImpl implements Ghost {
         this.targetCorner = targetCorner;
         this.targetLocation = getTargetLocation();
         this.currentDirection = null;
-        this.chaseStrategy = chaseStrategy;
+
+        // DEFAULT CHASE PACMAN
+        this.chaseStrategy = new BlinkyStrategy();
     }
 
     @Override
@@ -208,5 +209,9 @@ public class GhostImpl implements Ghost {
     @Override
     public Vector2D getCenter() {
         return new Vector2D(boundingBox.getMiddleX(), boundingBox.getMiddleY());
+    }
+
+    protected void setChaseStrategy(ChaseStrategy chaseStrategy) {
+        this.chaseStrategy = chaseStrategy;
     }
 }
