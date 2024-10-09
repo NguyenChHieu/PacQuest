@@ -1,6 +1,7 @@
 package pacman.model.entity.dynamic.ghost;
 
 import pacman.model.entity.dynamic.DynamicEntity;
+import pacman.model.entity.dynamic.physics.Vector2D;
 import pacman.model.entity.dynamic.player.observer.PlayerPositionObserver;
 
 import java.util.Map;
@@ -22,4 +23,6 @@ public interface Ghost extends DynamicEntity, PlayerPositionObserver {
      * @param ghostMode mode of the Ghost
      */
     void setGhostMode(GhostMode ghostMode);
+
+    Vector2D getTargetCorner();
 }
