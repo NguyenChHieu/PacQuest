@@ -19,7 +19,7 @@ public class ClydeStrategy implements ChaseStrategy {
         if (distance > 8) {
             return playerPosition.getPosition();
         }
-        return currentGhost.getCenter();
+        return currentGhost.getTargetCorner();
     }
 
 }
