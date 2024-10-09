@@ -1,4 +1,4 @@
-package pacman.model.factories;
+package pacman.model.factories.pelletfactories;
 
 import javafx.scene.image.Image;
 import pacman.ConfigurationParseException;
@@ -7,14 +7,15 @@ import pacman.model.entity.dynamic.physics.BoundingBox;
 import pacman.model.entity.dynamic.physics.BoundingBoxImpl;
 import pacman.model.entity.dynamic.physics.Vector2D;
 import pacman.model.entity.staticentity.collectable.Pellet;
+import pacman.model.factories.RenderableFactory;
 
 /**
  * Concrete renderable factory for Pellet objects
  */
 public class PelletFactory implements RenderableFactory {
-    private static final Image PELLET_IMAGE = new Image("maze/pellet.png");
-    private static final int NUM_POINTS = 100;
-    private final Renderable.Layer layer = Renderable.Layer.BACKGROUND;
+    protected static final Image PELLET_IMAGE = new Image("maze/pellet.png");
+    protected static final int NUM_POINTS = 100;
+    protected final Renderable.Layer layer = Renderable.Layer.BACKGROUND;
 
     @Override
     public Renderable createRenderable(

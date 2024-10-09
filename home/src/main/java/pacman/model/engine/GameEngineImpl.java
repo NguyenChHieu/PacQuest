@@ -7,6 +7,8 @@ import pacman.model.engine.observer.GameStateObserver;
 import pacman.model.entity.Renderable;
 import pacman.model.factories.*;
 import pacman.model.factories.ghostfactories.*;
+import pacman.model.factories.pelletfactories.PelletFactory;
+import pacman.model.factories.pelletfactories.SuperPelletFactory;
 import pacman.model.level.Level;
 import pacman.model.level.LevelImpl;
 import pacman.model.level.observer.LevelStateObserver;
