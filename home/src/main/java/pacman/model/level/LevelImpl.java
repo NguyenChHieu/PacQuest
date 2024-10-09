@@ -5,8 +5,11 @@ import pacman.ConfigurationParseException;
 import pacman.model.engine.observer.GameState;
 import pacman.model.entity.Renderable;
 import pacman.model.entity.dynamic.DynamicEntity;
+import pacman.model.entity.dynamic.ghost.ABlinkyGhost;
+import pacman.model.entity.dynamic.ghost.AInkyGhost;
 import pacman.model.entity.dynamic.ghost.Ghost;
 import pacman.model.entity.dynamic.ghost.GhostMode;
+import pacman.model.entity.dynamic.ghost.chasestrat.InkyStrategy;
 import pacman.model.entity.dynamic.physics.PhysicsEngine;
 import pacman.model.entity.dynamic.player.Controllable;
 import pacman.model.entity.dynamic.player.Pacman;
@@ -71,6 +74,26 @@ public class LevelImpl implements Level {
                 .map(element -> (Ghost) element)
                 .collect(Collectors.toList());
         Map<GhostMode, Double> ghostSpeeds = levelConfigurationReader.getGhostSpeeds();
+
+        // linked blinky to inky strategy
+        AInkyGhost inkyGhost = null;
+        for (Ghost ghost : this.ghosts) {
+            if (ghost instanceof AInkyGhost) {
+                inkyGhost = (AInkyGhost) ghost;
+                break;
+            }
+        }
+
+        ABlinkyGhost blinkyGhost = null;
+        for (Ghost ghost : this.ghosts) {
+            if (ghost instanceof ABlinkyGhost) {
+                blinkyGhost = (ABlinkyGhost) ghost;
+                break;
+            }
+        }
+
+        InkyStrategy strategy = (InkyStrategy) inkyGhost.getGhostStrategy();
+        strategy.setBlinkyGhost(blinkyGhost);
 
         for (Ghost ghost : this.ghosts) {
             player.registerObserver(ghost);

@@ -29,7 +29,7 @@ public class GhostImpl implements Ghost {
     private Map<GhostMode, Double> speeds;
     private int currentDirectionCount = 0;
 
-    private ChaseStrategy chaseStrategy;
+    protected ChaseStrategy chaseStrategy;
 
     public GhostImpl(Image image,
                      BoundingBox boundingBox,

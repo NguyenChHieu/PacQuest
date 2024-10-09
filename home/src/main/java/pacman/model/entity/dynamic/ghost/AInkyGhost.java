@@ -1,6 +1,7 @@
 package pacman.model.entity.dynamic.ghost;
 
 import javafx.scene.image.Image;
+import pacman.model.entity.dynamic.ghost.chasestrat.ChaseStrategy;
 import pacman.model.entity.dynamic.ghost.chasestrat.InkyStrategy;
 import pacman.model.entity.dynamic.physics.BoundingBox;
 import pacman.model.entity.dynamic.physics.KinematicState;
@@ -16,4 +17,7 @@ public class AInkyGhost extends GhostImpl {
         setChaseStrategy(new InkyStrategy());
     }
 
+    public ChaseStrategy getGhostStrategy() {
+        return chaseStrategy;
+    }
 }
