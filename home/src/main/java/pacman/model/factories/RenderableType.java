@@ -12,5 +12,9 @@ public interface RenderableType {
     char DOWN_RIGHT_WALL = '6';
     char PELLET = '7';
     char PACMAN = 'p';
-    char GHOST = 'g';
+    char GHOST = 'c';
+    char BLINKY = 'b';
+    char INKY = 'i';
+    char PINKY = 's';
+    char CLYDE = 'c';
 }
