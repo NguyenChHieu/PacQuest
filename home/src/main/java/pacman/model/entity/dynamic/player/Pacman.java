@@ -139,7 +139,7 @@ public class Pacman implements Controllable, PlayerPositionSubject {
     @Override
     public void registerObserver(PlayerPositionObserver observer) {
         this.observers.add(observer);
-        observer.update(this.kinematicState.getPosition());
+        observer.update(this.kinematicState, getCenter());
     }
 
     @Override
@@ -149,7 +149,7 @@ public class Pacman implements Controllable, PlayerPositionSubject {
 
     public void notifyObservers() {
         for (PlayerPositionObserver playerPositionObserver : observers) {
-            playerPositionObserver.update(this.kinematicState.getPosition());
+            playerPositionObserver.update(this.kinematicState, getCenter());
         }
     }
 

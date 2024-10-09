@@ -1,5 +1,6 @@
 package pacman.model.entity.dynamic.player.observer;
 
+import pacman.model.entity.dynamic.physics.KinematicState;
 import pacman.model.entity.dynamic.physics.Vector2D;
 
 /***
@@ -12,5 +13,5 @@ public interface PlayerPositionObserver {
      *
      * @param position the player's position
      */
-    void update(Vector2D position);
+    void update(KinematicState position, Vector2D center);
 }
