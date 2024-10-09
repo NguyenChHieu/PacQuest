@@ -6,6 +6,8 @@ import pacman.model.entity.dynamic.physics.Vector2D;
 import pacman.model.maze.MazeCreator;
 
 public class ClydeStrategy implements ChaseStrategy {
+    private static final int MIN_DISTANCE = 8;
+
     @Override
     public Vector2D chase(KinematicState playerPosition, Vector2D pacmanCenter, Ghost currentGhost) {
         int xTilePacman = (int) Math.floor(pacmanCenter.getX() / MazeCreator.RESIZING_FACTOR);
@@ -16,7 +18,7 @@ public class ClydeStrategy implements ChaseStrategy {
         double distance = Vector2D.calculateEuclideanDistance(new Vector2D(xTilePacman, yTilePacman),
                 new Vector2D(xTileGhost, yTileGhost));
 
-        if (distance > 8) {
+        if (distance > MIN_DISTANCE) {
             return playerPosition.getPosition();
         }
         return currentGhost.getTargetCorner();

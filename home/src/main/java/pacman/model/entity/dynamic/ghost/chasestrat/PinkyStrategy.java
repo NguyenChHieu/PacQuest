@@ -7,6 +7,8 @@ import pacman.model.entity.dynamic.physics.Vector2D;
 import pacman.model.maze.MazeCreator;
 
 public class PinkyStrategy implements ChaseStrategy {
+    private static final int MIN_DISTANCE = 4;
+
     @Override
     public Vector2D chase(KinematicState playerPosition, Vector2D pacmanCenter, Ghost currentGhost) {
         int xTile = (int) Math.floor(pacmanCenter.getX() / MazeCreator.RESIZING_FACTOR);
@@ -15,16 +17,16 @@ public class PinkyStrategy implements ChaseStrategy {
         Direction playerDirection = playerPosition.getDirection();
         switch (playerDirection) {
             case UP:
-                yTile -= 4;
+                yTile -= MIN_DISTANCE;
                 break;
             case DOWN:
-                yTile += 4;
+                yTile += MIN_DISTANCE;
                 break;
             case LEFT:
-                xTile -= 4;
+                xTile -= MIN_DISTANCE;
                 break;
             case RIGHT:
-                xTile += 4;
+                xTile += MIN_DISTANCE;
                 break;
         }
 
