@@ -29,8 +29,8 @@ public class PinkyStrategy implements ChaseStrategy {
                 xTile += MIN_DISTANCE;
                 break;
         }
-        xTile = Math.max(Math.min(xTile, 27), 0);
-        yTile = Math.max(Math.min(yTile, 35), 0);
+        xTile = Math.max(Math.min(xTile, 26), 1);
+        yTile = Math.max(Math.min(yTile, 32), 4);
 
         return new Vector2D(xTile * MazeCreator.RESIZING_FACTOR,
                 yTile * MazeCreator.RESIZING_FACTOR);

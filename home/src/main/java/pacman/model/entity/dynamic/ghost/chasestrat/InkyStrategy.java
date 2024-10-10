@@ -38,8 +38,8 @@ public class InkyStrategy implements ChaseStrategy {
         int xDiff = xTilePacman - xTileBlinky;
         int yDiff = yTilePacman - yTileBlinky;
 
-        int xTileInky = Math.max(Math.min(xTileBlinky + 2*xDiff, 27), 0);
-        int yTileInky = Math.max(Math.min(yTileBlinky + 2*yDiff, 35), 0);
+        int xTileInky = Math.max(Math.min(xTileBlinky + 2*xDiff, 26), 1);
+        int yTileInky = Math.max(Math.min(yTileBlinky + 2*yDiff, 32), 4);
 
         return new Vector2D(xTileInky * MazeCreator.RESIZING_FACTOR, yTileInky * MazeCreator.RESIZING_FACTOR);
     }
