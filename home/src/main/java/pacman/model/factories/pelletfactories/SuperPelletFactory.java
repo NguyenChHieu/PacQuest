@@ -1,35 +1,33 @@
 package pacman.model.factories.pelletfactories;
 
-import javafx.scene.image.Image;
 import pacman.ConfigurationParseException;
 import pacman.model.entity.Renderable;
 import pacman.model.entity.dynamic.physics.BoundingBox;
 import pacman.model.entity.dynamic.physics.BoundingBoxImpl;
 import pacman.model.entity.dynamic.physics.Vector2D;
-import pacman.model.entity.staticentity.collectable.Pellet;
-import pacman.model.factories.RenderableFactory;
+import pacman.model.entity.staticentity.collectable.SuperPellet;
 
-/**
- * Concrete renderable factory for Pellet objects
- */
-public class PelletFactory implements RenderableFactory {
-    protected static final Image PELLET_IMAGE = new Image("maze/pellet.png");
-    protected static int NUM_POINTS = 10;
-    protected final Renderable.Layer layer = Renderable.Layer.BACKGROUND;
+public class SuperPelletFactory extends PelletFactory {
+    private static final double OFFSET = -8;
 
     @Override
     public Renderable createRenderable(
             Vector2D position
     ) {
         try {
+            NUM_POINTS = 50;
+
+            double newX = position.getX() + OFFSET;
+            double newY = position.getY() + OFFSET;
+            position = new Vector2D(newX, newY);
 
             BoundingBox boundingBox = new BoundingBoxImpl(
                     position,
-                    PELLET_IMAGE.getHeight(),
-                    PELLET_IMAGE.getWidth()
+                    PELLET_IMAGE.getHeight()*2,
+                    PELLET_IMAGE.getWidth()*2
             );
 
-            return new Pellet(
+            return new SuperPellet(
                     boundingBox,
                     layer,
                     PELLET_IMAGE,
