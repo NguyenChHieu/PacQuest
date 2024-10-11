@@ -75,6 +75,20 @@ public class LevelImpl implements Level {
                 .collect(Collectors.toList());
         Map<GhostMode, Double> ghostSpeeds = levelConfigurationReader.getGhostSpeeds();
 
+        setUpInkyStrategy();
+
+        for (Ghost ghost : this.ghosts) {
+            player.registerObserver(ghost);
+            ghost.setSpeeds(ghostSpeeds);
+            ghost.setGhostMode(this.currentGhostMode);
+        }
+        this.modeLengths = levelConfigurationReader.getGhostModeLengths();
+        // Set up collectables
+        this.collectables = new ArrayList<>(maze.getPellets());
+
+    }
+
+    private void setUpInkyStrategy() {
         // linked blinky to inky strategy
         AInkyGhost inkyGhost = null;
         for (Ghost ghost : this.ghosts) {
@@ -92,18 +106,9 @@ public class LevelImpl implements Level {
             }
         }
 
+        assert inkyGhost != null;
         InkyStrategy strategy = (InkyStrategy) inkyGhost.getGhostStrategy();
         strategy.setBlinkyGhost(blinkyGhost);
-
-        for (Ghost ghost : this.ghosts) {
-            player.registerObserver(ghost);
-            ghost.setSpeeds(ghostSpeeds);
-            ghost.setGhostMode(this.currentGhostMode);
-        }
-        this.modeLengths = levelConfigurationReader.getGhostModeLengths();
-        // Set up collectables
-        this.collectables = new ArrayList<>(maze.getPellets());
-
     }
 
     @Override
@@ -196,6 +201,9 @@ public class LevelImpl implements Level {
     public void collect(Collectable collectable) {
         this.points += collectable.getPoints();
         notifyObserversWithScoreChange(collectable.getPoints());
+
+        //TODO: super pellet observer
+
         this.collectables.remove(collectable);
     }
 
