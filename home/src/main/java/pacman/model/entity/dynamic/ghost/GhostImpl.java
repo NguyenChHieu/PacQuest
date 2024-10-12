@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class GhostImpl implements Ghost {
 
-    private static final int minimumDirectionCount = 8;
+    public static final int minimumDirectionCount = 8;
     private final Layer layer = Layer.FOREGROUND;
     private final Image image;
     private final BoundingBox boundingBox;
@@ -219,7 +219,28 @@ public class GhostImpl implements Ghost {
     public Vector2D getTargetCorner() {
         return this.targetLocation;
     }
+
     public Ghost getGhost() {
         return this;
+    }
+
+    @Override
+    public void setDirection(Direction direction) {
+        currentDirection = direction;
+    }
+
+    @Override
+    public KinematicState getKinematicState() {
+        return kinematicState;
+    }
+
+    @Override
+    public Set<Direction> getPossibleDirections() {
+        return possibleDirections;
+    }
+
+    @Override
+    public Direction getCurrentDirection() {
+        return currentDirection;
     }
 }

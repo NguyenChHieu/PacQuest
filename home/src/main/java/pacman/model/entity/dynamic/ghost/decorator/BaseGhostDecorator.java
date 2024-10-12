@@ -114,4 +114,24 @@ public abstract class BaseGhostDecorator implements Ghost {
     public Ghost getGhost() {
         return ghost;
     }
+
+    @Override
+    public void setDirection(Direction direction) {
+        ghost.setDirection(direction);
+    }
+
+    @Override
+    public KinematicState getKinematicState() {
+        return ghost.getKinematicState();
+    }
+
+    @Override
+    public Set<Direction> getPossibleDirections() {
+        return ghost.getPossibleDirections();
+    }
+
+    @Override
+    public Direction getCurrentDirection() {
+        return ghost.getCurrentDirection();
+    }
 }

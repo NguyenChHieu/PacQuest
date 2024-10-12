@@ -201,10 +201,9 @@ public class LevelImpl implements Level {
         renderables.set(renderables.indexOf(ghost), ghost.getGhost());
     }
 
-    private void addFrightenedDecorator(Ghost ghost){
-        var frightenedGhost = new FrightenedDecorator(ghost);
-        ghosts.set(ghosts.indexOf(ghost), frightenedGhost);
-        renderables.set(renderables.indexOf(ghost), frightenedGhost);
+    private void addDecorator(Ghost ghost, BaseGhostDecorator decoratedGhost){
+        ghosts.set(ghosts.indexOf(ghost), decoratedGhost);
+        renderables.set(renderables.indexOf(ghost), decoratedGhost);
     }
 
     @Override
@@ -222,11 +221,13 @@ public class LevelImpl implements Level {
         this.points += collectable.getPoints();
         notifyObserversWithScoreChange(collectable.getPoints());
 
-        //TODO: super pellet observer
+        //TODO: individual ghost logic
         if (collectable instanceof SuperPellet) {
-            currentGhostMode = GhostMode.FRIGHTENED;
-            for (Ghost ghost : ghosts) {
-                addFrightenedDecorator(ghost);
+            if (currentGhostMode != GhostMode.FRIGHTENED) {
+                currentGhostMode = GhostMode.FRIGHTENED;
+                for (Ghost ghost : ghosts) {
+                    addDecorator(ghost, new FrightenedDecorator(ghost));
+                }
             }
             tickCount = 0;
         }
