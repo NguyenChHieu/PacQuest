@@ -19,12 +19,13 @@ public class FrightenedDecorator extends BaseGhostDecorator{
     // TODO IMPLEMENT RANDOM TURNS
 
     @Override
-    public Image getImage() {
-        return image;
-    }
-
-    @Override
     public void update() {
         ghost.update();
+    }
+
+    // RENDERABLE
+    @Override
+    public Image getImage() {
+        return image;
     }
 }
