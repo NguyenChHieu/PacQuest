@@ -10,11 +10,12 @@ import pacman.model.entity.dynamic.ghost.AInkyGhost;
 import pacman.model.entity.dynamic.ghost.Ghost;
 import pacman.model.entity.dynamic.ghost.GhostMode;
 import pacman.model.entity.dynamic.ghost.chasestrat.InkyStrategy;
+import pacman.model.entity.dynamic.ghost.decorator.*;
 import pacman.model.entity.dynamic.physics.PhysicsEngine;
 import pacman.model.entity.dynamic.player.Controllable;
 import pacman.model.entity.dynamic.player.Pacman;
 import pacman.model.entity.staticentity.StaticEntity;
-import pacman.model.entity.staticentity.collectable.Collectable;
+import pacman.model.entity.staticentity.collectable.*;
 import pacman.model.level.observer.LevelStateObserver;
 import pacman.model.maze.Maze;
 
@@ -139,6 +140,13 @@ public class LevelImpl implements Level {
 
             if (tickCount == modeLengths.get(currentGhostMode)) {
 
+                // remove frightened decorator
+                if (currentGhostMode == GhostMode.FRIGHTENED){
+                    for (Ghost ghost : this.ghosts) {
+                        removeDecorator(ghost);
+                    }
+                }
+
                 // update ghost mode
                 this.currentGhostMode = GhostMode.getNextGhostMode(currentGhostMode);
                 for (Ghost ghost : this.ghosts) {
@@ -187,6 +195,18 @@ public class LevelImpl implements Level {
         tickCount++;
     }
 
+
+    private void removeDecorator(Ghost ghost){
+        ghosts.set(ghosts.indexOf(ghost), ghost.getGhost());
+        renderables.set(renderables.indexOf(ghost), ghost.getGhost());
+    }
+
+    private void addFrightenedDecorator(Ghost ghost){
+        var frightenedGhost = new FrightenedDecorator(ghost);
+        ghosts.set(ghosts.indexOf(ghost), frightenedGhost);
+        renderables.set(renderables.indexOf(ghost), frightenedGhost);
+    }
+
     @Override
     public boolean isPlayer(Renderable renderable) {
         return renderable == this.player;
@@ -203,6 +223,13 @@ public class LevelImpl implements Level {
         notifyObserversWithScoreChange(collectable.getPoints());
 
         //TODO: super pellet observer
+        if (collectable instanceof SuperPellet) {
+            currentGhostMode = GhostMode.FRIGHTENED;
+            for (Ghost ghost : ghosts) {
+                addFrightenedDecorator(ghost);
+            }
+            tickCount = 0;
+        }
 
         this.collectables.remove(collectable);
     }

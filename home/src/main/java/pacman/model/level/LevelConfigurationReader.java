@@ -10,7 +10,7 @@ import java.util.Map;
  * Helper class to read JSONObject to retrieve level configuration details
  */
 public class LevelConfigurationReader {
-
+    private static final int TICK_PER_SECOND = 1;
     private final JSONObject levelConfiguration;
 
     public LevelConfigurationReader(JSONObject levelConfiguration) {
@@ -34,8 +34,12 @@ public class LevelConfigurationReader {
     public Map<GhostMode, Integer> getGhostModeLengths() {
         Map<GhostMode, Integer> ghostModeLengths = new HashMap<>();
         JSONObject modeLengthsObject = (JSONObject) levelConfiguration.get("modeLengths");
-        ghostModeLengths.put(GhostMode.CHASE, ((Number) modeLengthsObject.get("chase")).intValue());
-        ghostModeLengths.put(GhostMode.SCATTER, ((Number) modeLengthsObject.get("scatter")).intValue());
+        ghostModeLengths.put(GhostMode.CHASE,
+                ((Number) modeLengthsObject.get("chase")).intValue() * TICK_PER_SECOND);
+        ghostModeLengths.put(GhostMode.SCATTER,
+                ((Number) modeLengthsObject.get("scatter")).intValue() * TICK_PER_SECOND);
+        ghostModeLengths.put(GhostMode.FRIGHTENED,
+                ((Number) modeLengthsObject.get("frightened")).intValue() * TICK_PER_SECOND);
         return ghostModeLengths;
     }
 
@@ -50,6 +54,7 @@ public class LevelConfigurationReader {
         JSONObject ghostSpeed = (JSONObject) levelConfiguration.get("ghostSpeed");
         ghostSpeeds.put(GhostMode.CHASE, ((Number) ghostSpeed.get("chase")).doubleValue());
         ghostSpeeds.put(GhostMode.SCATTER, ((Number) ghostSpeed.get("scatter")).doubleValue());
+        ghostSpeeds.put(GhostMode.FRIGHTENED, ((Number) ghostSpeed.get("frightened")).doubleValue());
         return ghostSpeeds;
     }
 }

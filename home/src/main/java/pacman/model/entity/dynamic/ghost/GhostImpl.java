@@ -88,11 +88,11 @@ public class GhostImpl implements Ghost {
             case DOWN -> this.kinematicState.down();
         }
     }
-
+    // TODO CHECK FRIGHTENED LOCATION
     private Vector2D getTargetLocation() {
         return switch (this.ghostMode) {
             case CHASE -> this.playerPosition;
-            case SCATTER -> this.targetCorner;
+            case SCATTER, FRIGHTENED -> this.targetCorner;
         };
     }
 
@@ -218,5 +218,8 @@ public class GhostImpl implements Ghost {
     @Override
     public Vector2D getTargetCorner() {
         return this.targetLocation;
+    }
+    public Ghost getGhost() {
+        return this;
     }
 }
