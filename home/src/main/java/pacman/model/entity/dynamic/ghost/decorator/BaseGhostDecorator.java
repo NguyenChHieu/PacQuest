@@ -19,8 +19,6 @@ public abstract class BaseGhostDecorator implements Ghost {
         this.ghost = ghost;
     }
 
-
-
     // RENDERABLE
 
     @Override
