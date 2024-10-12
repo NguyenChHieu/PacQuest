@@ -10,7 +10,7 @@ import java.util.Map;
  * Helper class to read JSONObject to retrieve level configuration details
  */
 public class LevelConfigurationReader {
-    private static final int TICK_PER_SECOND = 1;
+    private static final int TICK_PER_SECOND = 34;
     private final JSONObject levelConfiguration;
 
     public LevelConfigurationReader(JSONObject levelConfiguration) {
