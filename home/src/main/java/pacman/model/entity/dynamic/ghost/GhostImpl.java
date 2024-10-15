@@ -31,6 +31,7 @@ public class GhostImpl implements Ghost {
 
     protected ChaseStrategy chaseStrategy;
     private IGhostState state;
+    private int freezeCount;
 
     public GhostImpl(Image image,
                      BoundingBox boundingBox,
@@ -67,6 +68,11 @@ public class GhostImpl implements Ghost {
 
     @Override
     public void update() {
+        if (freezeCount > 0) {
+            freezeCount--;
+            return;
+        }
+
         state.update(this);
     }
 
@@ -215,5 +221,10 @@ public class GhostImpl implements Ghost {
     @Override
     public void setCurrentDirectionCount(int currentDirectionCount) {
         this.currentDirectionCount = currentDirectionCount;
+    }
+
+    @Override
+    public void freeze(int duration) {
+        this.freezeCount = duration;
     }
 }

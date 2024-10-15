@@ -46,6 +46,7 @@ public class GhostFrightenedState implements IGhostState {
         if (level.isPlayer(renderable)) {
             ghost.reset();
             ghost.setGhostMode(GhostMode.SCATTER);
+            ghost.freeze(34);
         }
     }
 

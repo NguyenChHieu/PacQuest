@@ -13,7 +13,7 @@ import java.util.Set;
 /**
  * Represents Ghost entity in Pac-Man Game
  */
-public interface Ghost extends DynamicEntity, PlayerPositionObserver {
+public interface Ghost extends DynamicEntity, PlayerPositionObserver, Freezable {
 
     /***
      * Sets the speeds of the Ghost for each GhostMode
