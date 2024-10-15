@@ -2,11 +2,8 @@ package pacman.model.entity.dynamic.ghost.state;
 
 import javafx.scene.image.Image;
 import pacman.model.entity.Renderable;
-import pacman.model.entity.dynamic.ghost.Ghost;
-import pacman.model.entity.dynamic.ghost.GhostMode;
-import pacman.model.entity.dynamic.physics.Direction;
-import pacman.model.entity.dynamic.physics.KinematicState;
-import pacman.model.entity.dynamic.player.decorator.ImmunityDecorator;
+import pacman.model.entity.dynamic.ghost.*;
+import pacman.model.entity.dynamic.physics.*;
 import pacman.model.level.Level;
 import pacman.model.maze.Maze;
 
@@ -46,8 +43,9 @@ public class GhostFrightenedState implements IGhostState {
 
     @Override
     public void collides(Level level, Renderable renderable) {
-        if (level.isPlayer(renderable) && renderable instanceof ImmunityDecorator) {
+        if (level.isPlayer(renderable)) {
             ghost.reset();
+            ghost.setGhostMode(GhostMode.SCATTER);
         }
     }
 
@@ -96,6 +94,10 @@ public class GhostFrightenedState implements IGhostState {
         // Randomly select a direction
         int rand = new Random().nextInt(validDirections.size());
         return validDirections.get(rand);
+    }
+
+    public void resetTickCount(int duration) {
+        tickCount = duration;
     }
 
     @Override
