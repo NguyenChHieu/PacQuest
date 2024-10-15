@@ -6,6 +6,7 @@ import pacman.model.entity.dynamic.physics.BoundingBox;
 import pacman.model.entity.dynamic.physics.Direction;
 import pacman.model.entity.dynamic.physics.Vector2D;
 import pacman.model.entity.dynamic.player.Controllable;
+import pacman.model.entity.dynamic.player.Pacman;
 import pacman.model.entity.dynamic.player.observer.PlayerPositionObserver;
 import pacman.model.entity.dynamic.player.observer.PlayerPositionSubject;
 import pacman.model.level.Level;
@@ -44,7 +45,7 @@ public abstract class BasePacmanDecorator implements Controllable, PlayerPositio
     }
     @Override
     public BoundingBox getBoundingBox() {
-        return null;
+        return pacman.getBoundingBox();
     }
     @Override
     public void reset() {
@@ -63,6 +64,10 @@ public abstract class BasePacmanDecorator implements Controllable, PlayerPositio
     @Override
     public void collideWith(Level level, Renderable renderable) {
         pacman.collideWith(level, renderable);
+    }
+    @Override
+    public boolean collidesWith(Renderable renderable) {
+        return pacman.collidesWith(renderable);
     }
     @Override
     public void setPosition(Vector2D position) {
@@ -119,5 +124,10 @@ public abstract class BasePacmanDecorator implements Controllable, PlayerPositio
     @Override
     public void switchImage() {
         pacman.switchImage();
+    }
+
+    @Override
+    public Pacman getPlayer() {
+        return (Pacman) pacman;
     }
 }

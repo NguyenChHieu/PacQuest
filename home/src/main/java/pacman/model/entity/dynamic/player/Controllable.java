@@ -1,12 +1,13 @@
 package pacman.model.entity.dynamic.player;
 
 import pacman.model.entity.dynamic.DynamicEntity;
+import pacman.model.entity.dynamic.player.decorator.PacmanComponent;
 import pacman.model.entity.dynamic.player.observer.PlayerPositionSubject;
 
 /**
  * Represents a Controllable character in the Pac-Man game
  */
-public interface Controllable extends DynamicEntity, PlayerPositionSubject {
+public interface Controllable extends DynamicEntity, PlayerPositionSubject, PacmanComponent {
 
     /**
      * Directs player to move up
