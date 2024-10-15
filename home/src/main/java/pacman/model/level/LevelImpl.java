@@ -190,7 +190,7 @@ public class LevelImpl implements Level {
         tickCount++;
     }
 
-    private void resetPlayer() {
+    public void resetPlayer() {
         renderables.remove(player);
         player = player.getPlayer();
         renderables.add(player);
@@ -236,6 +236,11 @@ public class LevelImpl implements Level {
         }
 
         this.collectables.remove(collectable);
+
+        // RESET PLAYER BEFORE GOING TO NEXT LEVEL
+        if (isLevelFinished()){
+            resetPlayer();
+        }
     }
 
     @Override
@@ -277,12 +282,7 @@ public class LevelImpl implements Level {
 
     @Override
     public boolean isLevelFinished() {
-        boolean finished = collectables.isEmpty();
-        if (finished){
-            resetPlayer();
-        }
-
-        return finished ;
+        return collectables.isEmpty();
     }
 
     @Override
