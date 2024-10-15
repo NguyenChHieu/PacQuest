@@ -139,9 +139,7 @@ public class LevelImpl implements Level {
 
                 // ADDED REMOVE DECORATOR PACMAN
                 if (currentGhostMode == GhostMode.FRIGHTENED){
-                    renderables.remove(player);
-                    player = player.getPlayer();
-                    renderables.add(player);
+                    resetPlayer();
                 }
 
                 // update ghost mode
@@ -190,6 +188,12 @@ public class LevelImpl implements Level {
         }
 
         tickCount++;
+    }
+
+    private void resetPlayer() {
+        renderables.remove(player);
+        player = player.getPlayer();
+        renderables.add(player);
     }
 
     @Override
@@ -273,7 +277,12 @@ public class LevelImpl implements Level {
 
     @Override
     public boolean isLevelFinished() {
-        return collectables.isEmpty();
+        boolean finished = collectables.isEmpty();
+        if (finished){
+            resetPlayer();
+        }
+
+        return finished ;
     }
 
     @Override
