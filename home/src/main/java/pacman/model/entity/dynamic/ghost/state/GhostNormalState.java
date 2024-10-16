@@ -41,6 +41,11 @@ public class GhostNormalState implements IGhostState {
         }
     }
 
+    @Override
+    public Image getImage() {
+        return ghost.getImage();
+    }
+
     private void updateDirection() {
         // Ghosts update their target location when they reach an intersection
         if (Maze.isAtIntersection(ghost.getPossibleDirections())) {
@@ -96,10 +101,5 @@ public class GhostNormalState implements IGhostState {
 
     public void frightenedState(int duration) {
         ghost.setState(new GhostFrightenedState(ghost, duration));
-    }
-
-    @Override
-    public Image getImage() {
-        return ghost.getImage();
     }
 }
