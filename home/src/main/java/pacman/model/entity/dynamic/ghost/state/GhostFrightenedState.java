@@ -44,10 +44,17 @@ public class GhostFrightenedState implements IGhostState {
     @Override
     public void collides(Level level, Renderable renderable) {
         if (level.isPlayer(renderable)) {
+            level.incrementGhostEatenCount();
+            level.addScore(calculatePoints(level.getGhostEatenCount()));
             ghost.reset();
             ghost.setGhostMode(GhostMode.SCATTER);
             ghost.freeze(34);
         }
+    }
+
+    @Override
+    public Image getImage() {
+        return img;
     }
 
     private void updateDirection() {
@@ -101,8 +108,7 @@ public class GhostFrightenedState implements IGhostState {
         tickCount = duration;
     }
 
-    @Override
-    public Image getImage() {
-        return img;
+    private int calculatePoints(int ghostEatenCount) {
+        return 200 * (int) Math.pow(2, ghostEatenCount -1);
     }
 }

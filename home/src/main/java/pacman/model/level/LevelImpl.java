@@ -41,6 +41,8 @@ public class LevelImpl implements Level {
     private List<Renderable> collectables;
     private GhostMode currentGhostMode;
 
+    private int ghostEatenCount = 0;
+
     public LevelImpl(JSONObject levelConfiguration,
                      Maze maze) {
         this.renderables = new ArrayList<>();
@@ -140,6 +142,7 @@ public class LevelImpl implements Level {
                 // ADDED REMOVE DECORATOR PACMAN
                 if (currentGhostMode == GhostMode.FRIGHTENED){
                     resetPlayer();
+                    resetGhostEatenCount();
                 }
 
                 // update ghost mode
@@ -212,6 +215,7 @@ public class LevelImpl implements Level {
         notifyObserversWithScoreChange(collectable.getPoints());
 
         if (collectable instanceof SuperPellet) {
+            resetGhostEatenCount();
             if (currentGhostMode != GhostMode.FRIGHTENED) {
                 currentGhostMode = GhostMode.FRIGHTENED;
 
@@ -240,6 +244,7 @@ public class LevelImpl implements Level {
         // RESET PLAYER BEFORE GOING TO NEXT LEVEL
         if (isLevelFinished()){
             resetPlayer();
+            resetGhostEatenCount();
         }
     }
 
@@ -343,5 +348,25 @@ public class LevelImpl implements Level {
     @Override
     public void handleGameEnd() {
         this.renderables.removeAll(getDynamicEntities());
+    }
+
+    @Override
+    public void incrementGhostEatenCount() {
+        ghostEatenCount++;
+    }
+
+    @Override
+    public int getGhostEatenCount() {
+        return ghostEatenCount;
+    }
+
+    @Override
+    public void addScore(int score) {
+        points += score;
+        notifyObserversWithScoreChange(score);
+    }
+
+    private void resetGhostEatenCount() {
+        ghostEatenCount = 0;
     }
 }
