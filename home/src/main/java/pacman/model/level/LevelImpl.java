@@ -353,6 +353,15 @@ public class LevelImpl implements Level {
     @Override
     public void incrementGhostEatenCount() {
         ghostEatenCount++;
+
+        // end frightened mode if all ghosts are eaten
+        if (ghostEatenCount == ghosts.size()){
+            resetPlayer();
+            resetGhostEatenCount();
+            this.currentGhostMode = GhostMode.getNextGhostMode(currentGhostMode);
+            tickCount = 0;
+        }
+
     }
 
     @Override

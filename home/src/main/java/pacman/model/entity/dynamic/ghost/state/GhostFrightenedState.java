@@ -44,11 +44,11 @@ public class GhostFrightenedState implements IGhostState {
     @Override
     public void collides(Level level, Renderable renderable) {
         if (level.isPlayer(renderable)) {
-            level.incrementGhostEatenCount();
             level.addScore(calculatePoints(level.getGhostEatenCount()));
             ghost.reset();
             ghost.setGhostMode(GhostMode.SCATTER);
             ghost.freeze(34);
+            level.incrementGhostEatenCount();
         }
     }
 
