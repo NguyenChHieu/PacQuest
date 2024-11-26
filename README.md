@@ -5,7 +5,7 @@ A maze-chase game where players control Pac-Man to navigate and outwit ghosts in
 
 ---
 
-![gif](https://github.com/user-attachments/assets/7cb637bd-6db1-4c95-9123-e38292265f07)
+<img src="https://github.com/user-attachments/assets/7cb637bd-6db1-4c95-9123-e38292265f07" alt="gif" width="400">
 
 ---
 
