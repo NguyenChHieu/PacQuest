@@ -5,6 +5,10 @@ A maze-chase game where players control Pac-Man to navigate and outwit ghosts in
 
 ---
 
+![gif](https://github.com/user-attachments/assets/7cb637bd-6db1-4c95-9123-e38292265f07)
+
+---
+
 ## Gameplay Overview  
 + Enter the iconic world of Pac-Quest! Your mission: guide Pac-Man through the maze to consume all the dots while evading the relentless ghosts.  
 + Strategically use the Power Pellets to turn the tables and devour ghosts for bonus points.  
