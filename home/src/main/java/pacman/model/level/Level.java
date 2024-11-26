@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * The base interface for a Pac-Man level.
  */
-public interface Level extends LevelStateSubject {
+public interface Level extends LevelStateSubject, GhostScoreHandler {
     /**
      * Return a list of the currently existing Renderables
      *
@@ -45,7 +45,6 @@ public interface Level extends LevelStateSubject {
     /**
      * Checks if the given renderable is the Player
      *
-     * @param renderable
      * @return true, if renderable is the Player renderable
      */
     boolean isPlayer(Renderable renderable);
@@ -53,7 +52,6 @@ public interface Level extends LevelStateSubject {
     /**
      * Checks if the given renderable is a Collectable for the level
      *
-     * @param renderable
      * @return true, if renderable is a Collectable for the level
      */
     boolean isCollectable(Renderable renderable);

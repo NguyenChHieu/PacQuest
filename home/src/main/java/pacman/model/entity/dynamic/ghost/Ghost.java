@@ -1,6 +1,7 @@
 package pacman.model.entity.dynamic.ghost;
 
 import pacman.model.entity.dynamic.DynamicEntity;
+import pacman.model.entity.dynamic.ghost.state.IGhostState;
 import pacman.model.entity.dynamic.physics.Direction;
 import pacman.model.entity.dynamic.physics.KinematicState;
 import pacman.model.entity.dynamic.physics.Vector2D;
@@ -12,7 +13,7 @@ import java.util.Set;
 /**
  * Represents Ghost entity in Pac-Man Game
  */
-public interface Ghost extends DynamicEntity, PlayerPositionObserver {
+public interface Ghost extends DynamicEntity, PlayerPositionObserver, Freezable {
 
     /***
      * Sets the speeds of the Ghost for each GhostMode
@@ -28,10 +29,24 @@ public interface Ghost extends DynamicEntity, PlayerPositionObserver {
     void setGhostMode(GhostMode ghostMode);
 
     Vector2D getTargetCorner();
-    Ghost getGhost();
 
-    void setDirection(Direction direction);
-    KinematicState getKinematicState();
-    Set<Direction> getPossibleDirections();
+    Vector2D getTargetLocation();
+
+    void setTargetLocation(Vector2D targetLocation);
+
+    void setCurrentDirection(Direction direction);
+
     Direction getCurrentDirection();
+
+    KinematicState getKinematicState();
+
+    Set<Direction> getPossibleDirections();
+
+    void setState(IGhostState state);
+
+    IGhostState getState();
+
+    int getCurrentDirectionCount();
+
+    void setCurrentDirectionCount(int currentDirectionCount);
 }

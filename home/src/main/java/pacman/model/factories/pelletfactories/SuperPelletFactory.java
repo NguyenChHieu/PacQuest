@@ -15,8 +15,6 @@ public class SuperPelletFactory extends PelletFactory {
             Vector2D position
     ) {
         try {
-            NUM_POINTS = 50;
-
             double newX = position.getX() + OFFSET;
             double newY = position.getY() + OFFSET;
             position = new Vector2D(newX, newY);
@@ -31,7 +29,7 @@ public class SuperPelletFactory extends PelletFactory {
                     boundingBox,
                     layer,
                     PELLET_IMAGE,
-                    NUM_POINTS
+                    NUM_POINTS * 5
             );
 
         } catch (Exception e) {

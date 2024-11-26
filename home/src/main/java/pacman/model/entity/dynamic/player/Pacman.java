@@ -187,4 +187,9 @@ public class Pacman implements Controllable, PlayerPositionSubject {
     public void switchImage() {
         this.isClosedImage = !this.isClosedImage;
     }
+
+    @Override
+    public Pacman getPlayer() {
+        return this;
+    }
 }

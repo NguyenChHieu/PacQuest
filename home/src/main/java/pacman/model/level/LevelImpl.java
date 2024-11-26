@@ -5,15 +5,12 @@ import pacman.ConfigurationParseException;
 import pacman.model.engine.observer.GameState;
 import pacman.model.entity.Renderable;
 import pacman.model.entity.dynamic.DynamicEntity;
-import pacman.model.entity.dynamic.ghost.ABlinkyGhost;
-import pacman.model.entity.dynamic.ghost.AInkyGhost;
-import pacman.model.entity.dynamic.ghost.Ghost;
-import pacman.model.entity.dynamic.ghost.GhostMode;
+import pacman.model.entity.dynamic.ghost.*;
 import pacman.model.entity.dynamic.ghost.chasestrat.InkyStrategy;
-import pacman.model.entity.dynamic.ghost.decorator.*;
+import pacman.model.entity.dynamic.ghost.state.*;
 import pacman.model.entity.dynamic.physics.PhysicsEngine;
-import pacman.model.entity.dynamic.player.Controllable;
-import pacman.model.entity.dynamic.player.Pacman;
+import pacman.model.entity.dynamic.player.*;
+import pacman.model.entity.dynamic.player.decorator.*;
 import pacman.model.entity.staticentity.StaticEntity;
 import pacman.model.entity.staticentity.collectable.*;
 import pacman.model.level.observer.LevelStateObserver;
@@ -43,6 +40,8 @@ public class LevelImpl implements Level {
     private GameState gameState;
     private List<Renderable> collectables;
     private GhostMode currentGhostMode;
+
+    private int ghostEatenCount = 0;
 
     public LevelImpl(JSONObject levelConfiguration,
                      Maze maze) {
@@ -140,11 +139,10 @@ public class LevelImpl implements Level {
 
             if (tickCount == modeLengths.get(currentGhostMode)) {
 
-                // remove frightened decorator
+                // ADDED REMOVE DECORATOR PACMAN
                 if (currentGhostMode == GhostMode.FRIGHTENED){
-                    for (Ghost ghost : this.ghosts) {
-                        removeDecorator(ghost);
-                    }
+                    resetPlayer();
+                    resetGhostEatenCount();
                 }
 
                 // update ghost mode
@@ -195,15 +193,10 @@ public class LevelImpl implements Level {
         tickCount++;
     }
 
-
-    private void removeDecorator(Ghost ghost){
-        ghosts.set(ghosts.indexOf(ghost), ghost.getGhost());
-        renderables.set(renderables.indexOf(ghost), ghost.getGhost());
-    }
-
-    private void addDecorator(Ghost ghost, BaseGhostDecorator decoratedGhost){
-        ghosts.set(ghosts.indexOf(ghost), decoratedGhost);
-        renderables.set(renderables.indexOf(ghost), decoratedGhost);
+    public void resetPlayer() {
+        renderables.remove(player);
+        player = player.getPlayer();
+        renderables.add(player);
     }
 
     @Override
@@ -221,18 +214,38 @@ public class LevelImpl implements Level {
         this.points += collectable.getPoints();
         notifyObserversWithScoreChange(collectable.getPoints());
 
-        //TODO: individual ghost logic
         if (collectable instanceof SuperPellet) {
+            resetGhostEatenCount();
             if (currentGhostMode != GhostMode.FRIGHTENED) {
                 currentGhostMode = GhostMode.FRIGHTENED;
-                for (Ghost ghost : ghosts) {
-                    addDecorator(ghost, new FrightenedDecorator(ghost));
-                }
+
+                renderables.remove(player);
+                player = new ImmunityDecorator(player);
+                renderables.add(player);
             }
+
+
+            for (Ghost ghost : this.ghosts) {
+                if (ghost.getState() instanceof GhostNormalState state) {
+                    state.frightenedState(modeLengths.get(currentGhostMode));
+                }
+                else{
+                    GhostFrightenedState fState = (GhostFrightenedState) ghost.getState();
+                    fState.resetTickCount(modeLengths.get(currentGhostMode));
+                }
+
+            }
+
             tickCount = 0;
         }
 
         this.collectables.remove(collectable);
+
+        // RESET PLAYER BEFORE GOING TO NEXT LEVEL
+        if (isLevelFinished()){
+            resetPlayer();
+            resetGhostEatenCount();
+        }
     }
 
     @Override
@@ -241,6 +254,11 @@ public class LevelImpl implements Level {
             for (DynamicEntity dynamicEntity : getDynamicEntities()) {
                 dynamicEntity.reset();
             }
+            // ADDED SET GHOST SPEED
+            for (Ghost ghost : ghosts) {
+                ghost.setGhostMode(GhostMode.SCATTER);
+            }
+
             setNumLives(numLives - 1);
             setGameState(GameState.READY);
             tickCount = 0;
@@ -330,5 +348,34 @@ public class LevelImpl implements Level {
     @Override
     public void handleGameEnd() {
         this.renderables.removeAll(getDynamicEntities());
+    }
+
+    @Override
+    public void incrementGhostEatenCount() {
+        ghostEatenCount++;
+
+        // end frightened mode if all ghosts are eaten
+        if (ghostEatenCount == ghosts.size()){
+            resetPlayer();
+            resetGhostEatenCount();
+            this.currentGhostMode = GhostMode.getNextGhostMode(currentGhostMode);
+            tickCount = 0;
+        }
+
+    }
+
+    @Override
+    public int getGhostEatenCount() {
+        return ghostEatenCount;
+    }
+
+    @Override
+    public void addScore(int score) {
+        points += score;
+        notifyObserversWithScoreChange(score);
+    }
+
+    private void resetGhostEatenCount() {
+        ghostEatenCount = 0;
     }
 }

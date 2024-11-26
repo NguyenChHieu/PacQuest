@@ -3,9 +3,9 @@ package pacman.model.entity.dynamic.ghost;
 import javafx.scene.image.Image;
 import pacman.model.entity.Renderable;
 import pacman.model.entity.dynamic.ghost.chasestrat.*;
+import pacman.model.entity.dynamic.ghost.state.*;
 import pacman.model.entity.dynamic.physics.*;
 import pacman.model.level.Level;
-import pacman.model.maze.Maze;
 
 import java.util.*;
 
@@ -30,6 +30,8 @@ public class GhostImpl implements Ghost {
     private int currentDirectionCount = 0;
 
     protected ChaseStrategy chaseStrategy;
+    private IGhostState state;
+    private int freezeCount;
 
     public GhostImpl(Image image,
                      BoundingBox boundingBox,
@@ -45,6 +47,7 @@ public class GhostImpl implements Ghost {
         this.targetCorner = targetCorner;
         this.targetLocation = getTargetLocation();
         this.currentDirection = null;
+        this.state = new GhostNormalState(this);
 
         // DEFAULT CHASE PACMAN
         this.chaseStrategy = new BlinkyStrategy();
@@ -57,72 +60,20 @@ public class GhostImpl implements Ghost {
 
     @Override
     public Image getImage() {
-        return image;
+        if (state instanceof GhostNormalState) {
+            return image;
+        }
+        return state.getImage();
     }
 
     @Override
     public void update() {
-        this.updateDirection();
-        this.kinematicState.update();
-        this.boundingBox.setTopLeft(this.kinematicState.getPosition());
-    }
-
-    private void updateDirection() {
-        // Ghosts update their target location when they reach an intersection
-        if (Maze.isAtIntersection(this.possibleDirections)) {
-            this.targetLocation = getTargetLocation();
+        if (freezeCount > 0) {
+            freezeCount--;
+            return;
         }
 
-        Direction newDirection = selectDirection(possibleDirections);
-
-        // Ghosts have to continue in a direction for a minimum time before changing direction
-        if (this.currentDirection != newDirection) {
-            this.currentDirectionCount = 0;
-        }
-        this.currentDirection = newDirection;
-
-        switch (currentDirection) {
-            case LEFT -> this.kinematicState.left();
-            case RIGHT -> this.kinematicState.right();
-            case UP -> this.kinematicState.up();
-            case DOWN -> this.kinematicState.down();
-        }
-    }
-    // TODO CHECK FRIGHTENED LOCATION
-    private Vector2D getTargetLocation() {
-        return switch (this.ghostMode) {
-            case CHASE -> this.playerPosition;
-            case SCATTER, FRIGHTENED -> this.targetCorner;
-        };
-    }
-
-    private Direction selectDirection(Set<Direction> possibleDirections) {
-        if (possibleDirections.isEmpty()) {
-            return currentDirection;
-        }
-
-        // ghosts have to continue in a direction for a minimum time before changing direction
-        if (currentDirection != null && currentDirectionCount < minimumDirectionCount) {
-            currentDirectionCount++;
-            return currentDirection;
-        }
-
-        Map<Direction, Double> distances = new HashMap<>();
-
-        for (Direction direction : possibleDirections) {
-            // ghosts never choose to reverse travel
-            if (currentDirection == null || direction != currentDirection.opposite()) {
-                distances.put(direction, Vector2D.calculateEuclideanDistance(this.kinematicState.getPotentialPosition(direction), this.targetLocation));
-            }
-        }
-
-        // only go the opposite way if trapped
-        if (distances.isEmpty()) {
-            return currentDirection.opposite();
-        }
-
-        // select the direction that will reach the target location fastest
-        return Collections.min(distances.entrySet(), Map.Entry.comparingByValue()).getKey();
+        state.update(this);
     }
 
     @Override
@@ -140,9 +91,7 @@ public class GhostImpl implements Ghost {
 
     @Override
     public void collideWith(Level level, Renderable renderable) {
-        if (level.isPlayer(renderable)) {
-            level.handleLoseLife();
-        }
+        state.collides(level, renderable);
     }
 
     @Override
@@ -194,11 +143,7 @@ public class GhostImpl implements Ghost {
         this.boundingBox.setTopLeft(startingPosition);
         this.ghostMode = GhostMode.SCATTER;
         this.currentDirectionCount = minimumDirectionCount;
-    }
-
-    @Override
-    public void setPossibleDirections(Set<Direction> possibleDirections) {
-        this.possibleDirections = possibleDirections;
+        this.state = new GhostNormalState(this);
     }
 
     @Override
@@ -220,12 +165,26 @@ public class GhostImpl implements Ghost {
         return this.targetLocation;
     }
 
-    public Ghost getGhost() {
-        return this;
+    @Override
+    public Vector2D getTargetLocation() {
+        return switch (this.ghostMode) {
+            case CHASE -> this.playerPosition;
+            case SCATTER -> this.targetCorner;
+            case FRIGHTENED -> null;
+        };
+    }
+
+    public void setTargetLocation(Vector2D targetLocation) {
+        this.targetLocation = targetLocation;
     }
 
     @Override
-    public void setDirection(Direction direction) {
+    public Direction getCurrentDirection() {
+        return currentDirection;
+    }
+
+    @Override
+    public void setCurrentDirection(Direction direction) {
         currentDirection = direction;
     }
 
@@ -235,12 +194,37 @@ public class GhostImpl implements Ghost {
     }
 
     @Override
+    public void setPossibleDirections(Set<Direction> possibleDirections) {
+        this.possibleDirections = possibleDirections;
+    }
+
+    @Override
     public Set<Direction> getPossibleDirections() {
         return possibleDirections;
     }
 
     @Override
-    public Direction getCurrentDirection() {
-        return currentDirection;
+    public void setState(IGhostState state) {
+        this.state = state;
+    }
+
+    @Override
+    public IGhostState getState() {
+        return state;
+    }
+
+    @Override
+    public int getCurrentDirectionCount() {
+        return currentDirectionCount;
+    }
+
+    @Override
+    public void setCurrentDirectionCount(int currentDirectionCount) {
+        this.currentDirectionCount = currentDirectionCount;
+    }
+
+    @Override
+    public void freeze(int duration) {
+        this.freezeCount = duration;
     }
 }
