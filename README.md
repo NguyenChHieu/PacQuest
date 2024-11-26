@@ -65,3 +65,4 @@ A maze-chase game where players control Pac-Man to navigate and outwit ghosts in
 
 **Dive into Pac-Quest for an immersive blend of strategy, reflexes, and nostalgic fun. Prepare to chomp your way to victory while outwitting the maze’s cunning inhabitants!**
 
+- Derived from A2-s0ft2201 24'
