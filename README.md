@@ -40,8 +40,11 @@ A maze-chase game where players control Pac-Man to navigate and outwit ghosts in
 ---
 
 ## Power Pellets and Frightened Mode  
-+ Collect Power Pellets to activate **Frightened Mode**:  
-  - Ghosts slow down and move randomly.  
++ Collect Power Pellets to activate **Frightened Mode**:
+  - Ghosts slow down and move randomly.
+
+![image](https://github.com/user-attachments/assets/61646d75-5212-46ad-b8b5-2c0e74981ba2)
+    
   - Pac-Man can eat ghosts for escalating bonus points (200 → 400 → 800 → 1600).  
   - Consuming additional Power Pellets resets the Frightened timer.  
 
