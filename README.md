@@ -24,6 +24,9 @@ A maze-chase game where players control Pac-Man to navigate and outwit ghosts in
 ---
 
 ## Ghosts and Modes  
+
+![image](https://github.com/user-attachments/assets/0d5e3840-56df-4ac2-8823-4adc1339ea2d)
+
 + Four unique ghost types with distinctive behaviors:  
   - **Shadow (Blinky)**: Targets Pac-Man directly.  
   - **Speedy (Pinky)**: Ambushes Pac-Man based on predicted movements.  
